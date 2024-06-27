@@ -13,13 +13,14 @@ class Biblioteca(models.Model):
     def __str__(self):
         return self.nombre
 
+
 class Libro(models.Model):
     idLibro = models.AutoField(primary_key=True)
     titulo = models.CharField(max_length=200)
     autor = models.CharField(max_length=200)
     editorial = models.CharField(max_length=200)
-    anioPublicacion = models.DateField()
-    idBiblioteca = models.ForeignKey(Biblioteca, on_delete=models.CASCADE)
+    anioPublicacion = models.DateField(verbose_name="Año de Publicación")
+    idBiblioteca = models.ForeignKey(Biblioteca, on_delete=models.CASCADE, verbose_name="Biblioteca")
 
     class Meta:
         db_table = 'Libro'
@@ -41,18 +42,17 @@ class Usuario(models.Model):
     def __str__(self):
         return self.nombre
 
+
 class Prestamo(models.Model):
     idPrestamo = models.AutoField(primary_key=True)
-    fechaPrestamo = models.DateField()
-    fechaDevolucion = models.DateField()
+    fechaPrestamo = models.DateField(verbose_name="Fecha de Prestamo")
+    fechaDevolucion = models.DateField(verbose_name="Fecha de Devolución")
     estado = models.CharField(max_length=200)
-    idLibro = models.ForeignKey(Libro, on_delete=models.CASCADE)
-    idUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    idLibro = models.ForeignKey(Libro, on_delete=models.CASCADE, verbose_name="Libro")
+    idUsuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, verbose_name="Usuario")
 
     class Meta:
         db_table = 'Prestamo'
 
     def __str__(self):
-        return self.idPrestamo
-
-
+        return str(self.idPrestamo) + ' - ' + self.idLibro.titulo + ' - ' + self.idUsuario.nombre
